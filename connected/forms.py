@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 from connected.models import Event, Category, UserProfile, MAX_LENGTH_NAME
 
 class CategoryForm(forms.ModelForm):
-    name = forms.CharField(max_length=MAX_LENGTH_NAME, help_text="Please enter the category name.", unique=True, db_index=True)
+    name = forms.CharField(max_length=MAX_LENGTH_NAME, help_text="Please enter the category name.")
     slug = forms.CharField(widget=forms.HiddenInput(), required=False)
     
     class Meta:
