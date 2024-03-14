@@ -1,9 +1,9 @@
 from django import forms
 from django.contrib.auth.models import User
-from connected.models import Event, Category, UserProfile
+from connected.models import Event, Category, UserProfile, MAX_LENGTH_NAME
 
 class CategoryForm(forms.ModelForm):
-    name = forms.CharField(max_length=Category.NAME_MAX_LENGTH, help_text="Please enter the category name.")
+    name = forms.CharField(max_length=MAX_LENGTH_NAME, help_text="Please enter the category name.", unique=True, db_index=True)
     slug = forms.CharField(widget=forms.HiddenInput(), required=False)
     
     class Meta:
@@ -11,10 +11,10 @@ class CategoryForm(forms.ModelForm):
         fields = ('name', )
         
 class EventForm(forms.ModelForm):
-    title = forms.CharField(max_length=Page.TITLE_MAX_LENGTH,
+    title = forms.CharField(max_length=MAX_LENGTH_NAME,
                             help_text="Please enter the title of the page.")
     date = forms.CharField()
-    url = forms.URLField(max_length=Page.URL_MAX_LENGTH,
+    url = forms.URLField(max_length=200,
                          help_text="Please enter the URL of the page.")
     signups = forms.IntegerField(widget=forms.HiddenInput(), initial=0)
     

@@ -2,9 +2,10 @@ from django.db import models
 from django.template.defaultfilters import slugify
 from django.contrib.auth.models import User
 
+MAX_LENGTH_NAME = 128
+
 class Category(models.Model):
-    NAME_MAX_LENGTH = 128
-    name = models.CharField(max_length=NAME_MAX_LENGTH, unique=True)
+    name = models.CharField(max_length=MAX_LENGTH_NAME, unique=True)
     slug = models.SlugField(unique=True)
     
     def save(self, *args, **kwargs):
