@@ -6,16 +6,21 @@
 {% endblock %}
 
 {% block body_block %}
-    <h1>Connected says...</h1>
+    <h1>Welcome to Connected</h1>
+    <div class="logo-container">
+        <img src="{% static 'images/connected.png' %}" alt="Connected Logo">
+    </div>
     <div>
         {% if user.is_authenticated %} hi {{ user.username }}!
         {% endif %} <br/>
-        welcome to the connected communication app! <br />
+        A portal for connecting people <br />
         <strong>{{ boldmessage }}</strong><br />
     </div>
 
+    
+
     <div>
-        <h2>Most Liked Pages</h2>
+        <h2>Suggested People</h2>
         {% if categories %}
             <ul>
                 {% for category in categories %}
@@ -30,19 +35,6 @@
     </div>
 
     <div>
-        <h2>Most Viewed Pages</h2>
-        {% if top_pages %}
-            <ul>
-                {% for page in top_pages %}
-                    <li><a href="{{ page.url }}">{{ page.title }}</a></li>
-                {% endfor %}
-            </ul>
-        {% else %}
-            <div><strong>There are no pages present.</strong></div>
-        {% endif %}
-    </div>
-
-    <div>
-
+        
     </div>
 {% endblock %}

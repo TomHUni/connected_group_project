@@ -6,13 +6,21 @@
 {% endblock %}
 
 {% block body_block %}
-<h1>Login to connected</h1>
-<form id="login_form" method="post" action="{% url 'connected:login' %}">
-
-    {% csrf_token %}
-    Username: <input type="text" name="username" value="" size="50" />
-    <br />
-    Password: <input type="password" name="password" value="" size="50" /> <br />
-    <input type="submit" value="submit" />
-</form>
+    <h1>Login to Connected</h1>
+    <div class="form-container">
+        <form id="login_form" method="post" action="{% url 'connected:login' %}">
+            {% csrf_token %}
+            <div>
+                <label for="username">Username:</label><br>
+                <input type="text" id="username" name="username" value="" size="50" />
+            </div>
+            <div>
+                <label for="password">Password:</label><br>
+                <input type="password" id="password" name="password" value="" size="50" />
+            </div>
+            <div>
+                <input type="submit" value="Submit" />
+            </div>
+        </form>
+    </div>
 {% endblock %}
