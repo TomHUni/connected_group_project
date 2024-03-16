@@ -19,7 +19,14 @@
         <hr />
         <div>
             <ul>
+                {% if user.is_authenticated %}
+                <li><a href="{% url 'connected:restricted' %}">Restricted Page</a></li>
+                <li><a href="{% url 'connected:logout' %}">Logout</a></li>
                 <li><a href ="{% url 'connected:add_category' %}">Add a New Category</a></li>
+                {% else %}
+                <li><a href="{% url 'connected:register' %}">Sign Up</a></li>
+                <li><a href="{% url 'connected:login' %}">Login</a></li>
+                {% endif %}
                 <li><a href ="{% url 'connected:about' %}">About</a></li>
                 <li><a href ="{% url 'connected:index' %}">Index</a></li>
             </ul>

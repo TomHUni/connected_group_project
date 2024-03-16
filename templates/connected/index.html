@@ -8,6 +8,8 @@
 {% block body_block %}
     <h1>Connected says...</h1>
     <div>
+        {% if user.is_authenticated %} hi {{ user.username }}!
+        {% endif %} <br/>
         welcome to the connected communication app! <br />
         <strong>{{ boldmessage }}</strong><br />
     </div>
