@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'connected',
+    'widget_tweaks',
 ]
 
 MIDDLEWARE = [
@@ -120,6 +121,8 @@ USE_L10N = True
 USE_TZ = True
 
 LOGIN_URL = 'connected:login'
+
+LOGIN_REDIRECT_URL = 'connected:hub'
 
 
 # Static files (CSS, JavaScript, Images)

@@ -1,36 +1,46 @@
 <!DOCTYPE html>
-{% load staticfiles %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Connected - Welcome{% endblock %}</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
 
-<html>
-    <head>
-        <title>
-            Connected - 
-            {% block title_block %}
-                How to Tango with Django!
-            {% endblock %}
-        </title>
-        <link rel="stylesheet" type="text/css" href="{% static 'connected/css/styles.css' %}">
-    </head>
-    <body>
-        <div>
-        {% block body_block %}
-            This is body_block's default content.
-        {% endblock %}
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="{% url 'connected:home' %}">Connected</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+        <div class="navbar-nav">
+            <a class="nav-item nav-link" href="{% url 'connected:hub' %}">Hub</a>
+            <a class="nav-item nav-link" href="{% url 'connected:about' %}">About</a>
+            {% if user.is_authenticated %}
+                <a class="nav-item nav-link" href="{% url 'connected:logout' %}">Logout</a>
+                <a class="nav-link" href="{% url 'connected:profile' %}">Profile</a>
+            {% else %}
+                <a class="nav-item nav-link" href="{% url 'connected:login' %}">Login</a>
+                <a class="nav-item nav-link" href="{% url 'connected:register' %}">Register</a>
+            {% endif %}
         </div>
-        <hr />
-        <div>
-            <ul>
-                {% if user.is_authenticated %}
-                <li><a href="{% url 'connected:restricted' %}">Restricted Page</a></li>
-                <li><a href="{% url 'connected:logout' %}">Logout</a></li>
-                <li><a href ="{% url 'connected:add_category' %}">Add a New Category</a></li>
-                {% else %}
-                <li><a href="{% url 'connected:register' %}">Sign Up</a></li>
-                <li><a href="{% url 'connected:login' %}">Login</a></li>
-                {% endif %}
-                <li><a href ="{% url 'connected:about' %}">About</a></li>
-                <li><a href ="{% url 'connected:index' %}">Index</a></li>
-            </ul>
-        </div>
-    </body>
+    </div>
+</nav>
+
+{% block content %}{% endblock %}
+
+<footer class="bg-gray-800 text-white py-6">
+    <div class="container mx-auto text-center">
+        <p>&copy; 2024 Connected. All rights reserved.</p>
+        <p>Follow us on <a href="#" class="text-blue-400">Social Media</a>.</p>
+    </div>
+</footer>
+
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+</body>
 </html>

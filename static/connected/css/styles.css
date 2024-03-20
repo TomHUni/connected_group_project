@@ -165,3 +165,30 @@ a:hover {
     border-color: #f5c6cb;
     color: #721c24;
 }
+
+.bubble-tab {
+    display: inline-block;
+    padding: 10px 15px;
+    background-color: #f0f0f0; /* Light grey background */
+    border-radius: 20px; /* Rounded corners for the bubble effect */
+    margin: 5px;
+    border: 1px solid #d0d0d0; /* Slight border for definition */
+    font-weight: bold; /* Optional: makes the text bold */
+}
+
+.bubble-tab a {
+    color: #333; /* Dark grey text for contrast */
+    text-decoration: none; /* Removes underline from links */
+}
+
+.bubble-tab a:hover {
+    color: #0056b3; /* Change color on hover for visual feedback */
+}
+
+.jumbotron {
+    background-color: #f8f9fa; /* Light background color */
+    border-radius: 0.5rem;
+}
+.card-deck .card {
+    flex-grow: 1; /* Ensure cards have equal width and height */
+}

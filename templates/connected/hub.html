@@ -1,0 +1,58 @@
+{% extends 'connected/base.html' %}
+
+{% block title %}My Hub{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h2>Welcome to Your Hub</h2>
+    <!-- Button trigger modal -->
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addTabModal">
+        + Add New Tab
+    </button>
+
+    <!-- Modal -->
+    <div class="modal fade" id="addTabModal" tabindex="-1" aria-labelledby="addTabModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addTabModalLabel">New Tab</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form method="post" action="{% url 'connected:add_tab' %}">
+                    {% csrf_token %}
+                    <div class="modal-body">
+                        <div class="form-group">
+                            <label for="tabName">Tab Name</label>
+                            <input type="text" class="form-control" id="tabName" name="tab_name" required>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Add Tab</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-3">
+    {% for tab in tabs %}
+
+    <div class="col-sm-6 col-md-4 col-lg-3 mb-3">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">{{ tab.name }}</h5>
+                <!-- Optional: Add more tab details here -->
+                <a href="{% url 'connected:tab_detail' tab.id %}" class="btn btn-primary">View Tab</a>
+                <a href="{% url 'connected:rename_tab' tab.id %}" class="btn btn-sm btn-primary">Rename</a>
+                <a href="{% url 'connected:delete_tab' tab.id %}" class="btn btn-sm btn-danger">Delete</a>
+            </div>
+        </div>
+    </div>
+    
+    {% endfor %}
+</div>
+{% endblock %}
