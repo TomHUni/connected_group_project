@@ -3,9 +3,11 @@ from django.urls import reverse
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
+from django.contrib.auth.forms import UserCreationForm
 from datetime import datetime
 from connected.models import Category, Event
 from connected.forms import CategoryForm, EventForm, UserForm, UserProfileForm
+from .models import Tab
 
 def index(request):
     category_list = Category.objects.order_by('-likes')[:5]
@@ -16,6 +18,9 @@ def index(request):
     visitor_cookie_handler(request)
     response = render(request, 'connected/index.html', context=context_dict)
     return response
+
+def home_view(request):
+    return render(request, 'connected/home.html')
 
 def about(request):
     context_dict = {}
@@ -35,6 +40,24 @@ def show_category(request, category_name_slug):
         context_dict['category'] = None
         context_dict['events'] = None
     return render(request, 'connected/category.html', context=context_dict)
+
+# views.py in your Django app
+
+def hub_view(request):
+    if request.user.is_authenticated:
+        tabs = Tab.objects.filter(user=request.user)  # Fetch tabs associated with the user
+        return render(request, 'connected/hub.html', {'tabs': tabs})
+    else:
+        return redirect('connected:login')  # Redirect to login page if not authenticated
+
+
+def add_tab(request):
+    if request.method == 'POST' and request.user.is_authenticated:
+        tab_name = request.POST.get('tab_name')
+        Tab.objects.create(name=tab_name, user=request.user)  # Create a new tab for the user
+        return redirect('connected:hub')  # Redirect back to the hub
+    else:
+        return redirect('connected:login')  # Redirect to login page if not authenticated or not POST request
 
 @login_required
 def add_category(request):
@@ -82,32 +105,17 @@ def add_event(request, category_name_slug):
     return render(request, 'connected/add_page.html', context=context_dict)
 
 def register(request):
-    registered = False
-    
     if request.method == 'POST':
-        user_form = UserForm(request.POST)
-        profile_form = UserProfileForm(request.POST)
-        
-        if user_form.is_valid() and profile_form.is_valid():
-            user = user_form.save()
-            
-            user.set_password(user.password)
-            user.save()
-            
-            profile = profile_form.save(commit=False)
-            profile.user = user
-            
-            if 'picture' in request.FILES:
-                profile.picture = request.FILES['picture']
-            profile.save()
-            registered = True
-        else:
-            print(user_form.errors, profile_form.errors)
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            # Log the user in after registering
+            login(request, user)
+            return redirect('connected:hub')  # Redirect to the hub or another appropriate page
     else:
-        user_form = UserForm()
-        profile_form = UserProfileForm()
-        
-    return render(request, 'connected/register.html', context = {'user_form': user_form, 'profile_form': profile_form, 'registered': registered})
+        form = UserCreationForm()
+    return render(request, 'connected/register.html', {'form': form})
+
 
 def user_login(request):
     if request.method == 'POST':
@@ -133,7 +141,7 @@ def restricted(request):
 @login_required
 def user_logout(request):
     logout(request)
-    return redirect(reverse('connected:index'))
+    return redirect(reverse('connected:home'))
 
 def get_server_side_cookie(request, cookie, default_val=None):
     val = request.session.get(cookie)
@@ -151,3 +159,50 @@ def visitor_cookie_handler(request):
     else:
         request.session['last_visit'] = last_visit_cookie
     request.session['visits'] = visits
+    
+    # Import at the top
+from django.contrib.auth.views import LoginView
+from django.urls import reverse_lazy
+
+# Define your login view class
+class CustomLoginView(LoginView):
+    template_name = 'connected/login.html'
+    redirect_authenticated_user = True  # Redirect users who are already logged in
+    next_page = reverse_lazy('connected:home')  # Redirect to home after login
+
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import render
+
+@login_required
+def profile_view(request):
+    return render(request, 'connected/profile.html', {'user': request.user})
+
+from django.shortcuts import get_object_or_404, render
+from .models import Tab
+
+def tab_detail_view(request, tab_id):
+    tab = get_object_or_404(Tab, id=tab_id)
+    return render(request, 'connected/tab_detail.html', {'tab': tab})
+
+from django.shortcuts import get_object_or_404, redirect, render
+from django.urls import reverse
+from .models import Tab
+from django.contrib.auth.decorators import login_required
+from django.http import HttpResponseRedirect
+
+@login_required
+def rename_tab(request, tab_id):
+    tab = get_object_or_404(Tab, id=tab_id, user=request.user)  # Assuming there's a user field
+    if request.method == 'POST':
+        tab.name = request.POST.get('new_name')
+        tab.save()
+        return HttpResponseRedirect(reverse('connected:hub'))
+    return render(request, 'connected/rename_tab.html', {'tab': tab})
+
+@login_required
+def delete_tab(request, tab_id):
+    tab = get_object_or_404(Tab, id=tab_id, user=request.user)
+    if request.method == 'POST':
+        tab.delete()
+        return HttpResponseRedirect(reverse('connected:hub'))
+    return render(request, 'connected/delete_tab_confirmation.html', {'tab': tab})

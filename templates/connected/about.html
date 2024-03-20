@@ -1,15 +1,74 @@
 {% extends 'connected/base.html' %}
 
-{% block title_block %}
-    Connected - About
-{% endblock %}
+{% block title %}About{% endblock %}
 
-{% block body_block %}
-    <h1>Connected says...</h1>
-    <div>
-        here is the about page for the connected app. <br />
-        <strong>{{ boldmessage }}</strong><br />
+{% block content %}
+<div class="container mt-5">
+    <!-- Jumbotron for Main Introduction -->
+    <div class="jumbotron">
+        <h1 class="display-4">About Our Application</h1>
+        <p class="lead">This is a unique application designed to help you manage your daily tasks efficiently.</p>
+        <hr class="my-4">
+        <p>Learn more about our mission, features, and the team behind the development.</p>
     </div>
-    <div>
+
+    <!-- Team Section -->
+    <h2 class="mb-3">Meet Our Team</h2>
+    <div class="card-deck">
+        <!-- Example Team Member -->
+        <div class="card">
+            <img src="team_member_image_url" class="card-img-top" alt="Team Member Name">
+            <div class="card-body">
+                <h5 class="card-title">Aidan McCaughey</h5>
+                <p class="card-text">Short bio or role of the team member.</p>
+            </div>
+        </div>
+        <!-- Repeat for other team members -->
+        <div class="card">
+            <img src="team_member_image_url" class="card-img-top" alt="Team Member Name">
+            <div class="card-body">
+                <h5 class="card-title">Tom Huth</h5>
+                <p class="card-text">Short bio or role of the team member.</p>
+            </div>
+        </div>
+
+        <div class="card">
+            <img src="team_member_image_url" class="card-img-top" alt="Team Member Name">
+            <div class="card-body">
+                <h5 class="card-title">Mahid Khan</h5>
+                <p class="card-text">Short bio or role of the team member.</p>
+            </div>
+        </div>
+
+        <div class="card">
+            <img src="team_member_image_url" class="card-img-top" alt="Team Member Name">
+            <div class="card-body">
+                <h5 class="card-title">Ching Laam Chan</h5>
+                <p class="card-text">Short bio or role of the team member.</p>
+            </div>
+        </div>
+
+        <div class="card">
+            <img src="team_member_image_url" class="card-img-top" alt="Team Member Name">
+            <div class="card-body">
+                <h5 class="card-title">Yang Jie</h5>
+                <p class="card-text">Short bio or role of the team member.</p>
+            </div>
+        </div>
+
+        <div class="card">
+            <img src="team_member_image_url" class="card-img-top" alt="Team Member Name">
+            <div class="card-body">
+                <h5 class="card-title">Yousef Alayoubi</h5>
+                <p class="card-text">Short bio or role of the team member.</p>
+            </div>
+        </div>
     </div>
+
+    <!-- Call to Action Section -->
+    <div class="text-center mt-5">
+        <p class="lead">Excited about what we're building? Join us on our journey!</p>
+        <a class="btn btn-primary btn-lg" href="#" role="button">Get Involved</a>
+    </div>
+</div>
 {% endblock %}
