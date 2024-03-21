@@ -25,4 +25,10 @@ urlpatterns = [
     path('tabs/<int:tab_id>/', views.tab_detail_view, name='tab_detail'),
     path('tabs/<int:tab_id>/rename/', views.rename_tab, name='rename_tab'),
     path('tabs/<int:tab_id>/delete/', views.delete_tab, name='delete_tab'),
+    path('friends/', views.friends_list, name='friends_list'),
+    path('send-message/<int:receiver_id>/', views.send_message, name='send_message'),
+    path('friends/add/', views.add_friend, name='add_friend'),
+    path('friends/handle_request/', views.handle_friend_request, name='handle_friend_request'),
+
+
 ]

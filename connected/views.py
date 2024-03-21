@@ -206,3 +206,98 @@ def delete_tab(request, tab_id):
         tab.delete()
         return HttpResponseRedirect(reverse('connected:hub'))
     return render(request, 'connected/delete_tab_confirmation.html', {'tab': tab})
+
+from django.shortcuts import render
+from .models import Friend, Message
+
+from django.shortcuts import render
+from .forms import AddFriendForm
+
+from django.shortcuts import render
+from .forms import AddFriendForm
+
+def friends_list(request):
+    # Assuming you're passing friend requests and the add friend form
+    add_friend_form = AddFriendForm()
+    return render(request, 'connected/friends_list.html', {'add_friend_form': add_friend_form})
+
+
+
+from django import forms
+from django.http import HttpResponseRedirect
+from django.urls import reverse
+
+class MessageForm(forms.ModelForm):
+    class Meta:
+        model = Message
+        fields = ['message']
+
+def send_message(request, receiver_id):
+    if request.method == 'POST':
+        form = MessageForm(request.POST)
+        if form.is_valid():
+            message = form.save(commit=False)
+            message.sender = request.user
+            message.receiver_id = receiver_id
+            message.save()
+            return HttpResponseRedirect(reverse('connected:friends_list'))
+    else:
+        form = MessageForm()
+    return render(request, 'connected/send_message.html', {'form': form})
+
+from django.shortcuts import render, redirect, get_object_or_404
+from .models import FriendRequest
+from .forms import AddFriendForm, FriendRequestResponseForm
+from django.contrib.auth.models import User
+from django.contrib.auth.decorators import login_required
+
+@login_required
+def add_friend(request):
+    if request.method == 'POST':
+        form = AddFriendForm(request.POST)
+        if form.is_valid():
+            username = form.cleaned_data['username']
+            try:
+                user_to_add = User.objects.get(username=username)
+                # Prevent sending a request to oneself and duplicate requests
+                if user_to_add != request.user and not FriendRequest.objects.filter(from_user=request.user, to_user=user_to_add).exists():
+                    FriendRequest.objects.create(from_user=request.user, to_user=user_to_add)
+            except User.DoesNotExist:
+                pass  # Handle error or add a message indicating the user doesn't exist
+    return redirect('connected:friends_list')
+
+@login_required
+def handle_friend_request(request):
+    if request.method == 'POST':
+        action = request.POST.get('action', None)
+        request_id = request.POST.get('request_id', None)
+        friend_request = get_object_or_404(FriendRequest, id=request_id, to_user=request.user)
+        
+        if action == 'accept':
+            friend_request.from_user.friends.add(request.user)  # Assuming you have a many-to-many relationship set up
+            friend_request.to_user.friends.add(friend_request.from_user)
+            friend_request.delete()
+            messages.success(request, "Friend request accepted.")
+        elif action == 'decline':
+            friend_request.delete()
+            messages.info(request, "Friend request declined.")
+            
+    return redirect('connected:friends_list')
+
+
+from django.shortcuts import redirect, get_object_or_404
+from django.contrib.auth.models import User
+from .models import FriendRequest
+from django.contrib.auth.decorators import login_required
+from django.contrib import messages
+
+@login_required
+def send_friend_request(request, user_id):
+    to_user = get_object_or_404(User, id=user_id)
+    if request.user != to_user:
+        FriendRequest.objects.get_or_create(from_user=request.user, to_user=to_user)
+        messages.success(request, 'Friend request sent successfully.')
+    else:
+        messages.error(request, "You can't send a friend request to yourself.")
+    return redirect('wherever_you_want_to_redirect')
+

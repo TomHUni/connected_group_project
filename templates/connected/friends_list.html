@@ -1,0 +1,57 @@
+{% extends 'connected/base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1 class="mb-4">Friends</h1>
+
+    <!-- Add Friend Widget -->
+    <div class="card mb-4">
+        <div class="card-body">
+            <h5 class="card-title">Add a New Friend</h5>
+            <form method="post" action="{% url 'connected:add_friend' %}">
+                {% csrf_token %}
+                <div class="input-group mb-3">
+                    {{ add_friend_form.username }}
+                    <div class="input-group-append">
+                        <button class="btn btn-outline-secondary" type="submit">Add</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Friend Requests Widget -->
+    <div class="card mb-4">
+        <div class="card-body">
+            <h5 class="card-title">Friend Requests</h5>
+            {% for request in friend_requests %}
+            <div class="alert alert-info" role="alert">
+                {{ request.from_user.username }}
+                <form method="post" action="{% url 'connected:handle_friend_request' %}" class="d-inline">
+                    {% csrf_token %}
+                    <input type="hidden" name="request_id" value="{{ request.id }}">
+                    <button name="action" value="accept" class="btn btn-success btn-sm">Accept</button>
+                    <button name="action" value="decline" class="btn btn-danger btn-sm">Decline</button>
+                </form>
+            </div>
+            {% empty %}
+                <p>No friend requests at the moment.</p>
+            {% endfor %}
+        </div>
+    </div>
+
+    <!-- My Friends Widget -->
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title">My Friends</h5>
+            <ul class="list-group list-group-flush">
+                {% for friend in friends %}
+                <li class="list-group-item">{{ friend.username }}</li>
+                {% empty %}
+                <li class="list-group-item">You have no friends added yet.</li>
+                {% endfor %}
+            </ul>
+        </div>
+    </div>
+</div>
+{% endblock %}

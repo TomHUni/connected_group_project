@@ -43,3 +43,15 @@ class UserProfileForm(forms.ModelForm):
     class Meta:
         model = UserProfile
         fields = ('website', 'picture', )
+        
+from django import forms
+from django.contrib.auth import get_user_model
+
+User = get_user_model()
+
+class AddFriendForm(forms.Form):
+    username = forms.CharField(label='Username', max_length=150)
+
+class FriendRequestResponseForm(forms.Form):
+    request_id = forms.IntegerField(widget=forms.HiddenInput())
+    action = forms.CharField(widget=forms.HiddenInput())

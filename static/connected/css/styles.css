@@ -192,3 +192,10 @@ a:hover {
 .card-deck .card {
     flex-grow: 1; /* Ensure cards have equal width and height */
 }
+
+body { background-color: #f8f9fa; }
+.card { background-color: #fff; border: none; }
+.card-title { color: #007bff; }
+.input-group input { border-right: 0; }
+.input-group .input-group-append { margin-left: -1px; }
+.input-group .input-group-append .btn { border-left: 0; }

@@ -47,3 +47,24 @@ class Tab(models.Model):
 
     def __str__(self):
         return self.name
+    
+from django.conf import settings
+from django.db import models
+
+class Friend(models.Model):
+    users = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='friends')
+    created = models.DateTimeField(auto_now_add=True)
+
+class Message(models.Model):
+    sender = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='sent_messages', on_delete=models.CASCADE)
+    receiver = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='received_messages', on_delete=models.CASCADE)
+    message = models.TextField()
+    created = models.DateTimeField(auto_now_add=True)
+
+from django.conf import settings
+from django.db import models
+
+class FriendRequest(models.Model):
+    from_user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='friend_requests_sent', on_delete=models.CASCADE)
+    to_user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='friend_requests_received', on_delete=models.CASCADE)
+    timestamp = models.DateTimeField(auto_now_add=True)
