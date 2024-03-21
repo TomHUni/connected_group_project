@@ -20,11 +20,13 @@
         </div>
     </div>
 
+    
+
     <!-- Friend Requests Widget -->
     <div class="card mb-4">
         <div class="card-body">
             <h5 class="card-title">Friend Requests</h5>
-            {% for request in friend_requests %}
+            {% for request in incoming_requests %}
             <div class="alert alert-info" role="alert">
                 {{ request.from_user.username }}
                 <form method="post" action="{% url 'connected:handle_friend_request' %}" class="d-inline">

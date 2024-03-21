@@ -209,9 +209,15 @@ def delete_tab(request, tab_id):
         return HttpResponseRedirect(reverse('connected:hub'))
     return render(request, 'connected/delete_tab_confirmation.html', {'tab': tab})
 
+@login_required
 def friends_list(request):
     add_friend_form = AddFriendForm()
-    return render(request, 'connected/friends_list.html', {'add_friend_form': add_friend_form})
+    incoming_requests = FriendRequest.objects.filter(to_user=request.user)
+    context = {
+        'add_friend_form': add_friend_form,
+        'incoming_requests': incoming_requests,
+    }
+    return render(request, 'connected/friends_list.html', context)
 
 def send_message(request, receiver_id):
     if request.method == 'POST':
@@ -268,3 +274,16 @@ def send_friend_request(request, user_id):
     else:
         messages.error(request, "You can't send a friend request to yourself.")
     return redirect('wherever_you_want_to_redirect')
+
+from django.shortcuts import get_object_or_404, redirect
+from .models import FriendRequest, User  # Assuming User is Django's default User model
+from django.contrib.auth.decorators import login_required
+
+@login_required
+def accept_friend_request(request, request_id):
+    friend_request = get_object_or_404(FriendRequest, id=request_id, to_user=request.user)
+    # Add each user to the other's list of friends
+    friend_request.from_user.userprofile.friends.add(friend_request.to_user.userprofile)
+    friend_request.to_user.userprofile.friends.add(friend_request.from_user.userprofile)
+    friend_request.delete()
+    return redirect('your_redirect_url')

@@ -33,12 +33,13 @@ class Event(models.Model):
     def __str__(self):
         return self.title
     
+
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    
     website = models.URLField(blank=True)
     picture = models.ImageField(upload_to='profile_images', blank=True)
-    
+    friends = models.ManyToManyField('self', symmetrical=False, related_name='friends_plus', blank=True)
+
     def __str__(self):
         return self.user.username
     
@@ -63,3 +64,16 @@ class FriendRequest(models.Model):
     from_user = models.ForeignKey(User, related_name='friend_requests_sent', on_delete=models.CASCADE)
     to_user = models.ForeignKey(User, related_name='friend_requests_received', on_delete=models.CASCADE)
     timestamp = models.DateTimeField(auto_now_add=True)
+    
+class Friendship(models.Model):
+    from_user = models.ForeignKey(UserProfile, on_delete=models.CASCADE, related_name="friendship_creator_set")
+    to_user = models.ForeignKey(UserProfile, on_delete=models.CASCADE, related_name="friend_set")
+    created = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.from_user} friends with {self.to_user}"
+
+    class Meta:
+        unique_together = ('from_user', 'to_user')
+
+
