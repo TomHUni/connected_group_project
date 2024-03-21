@@ -1,6 +1,7 @@
 from django import forms
 from django.contrib.auth.models import User
-from connected.models import Event, Category, UserProfile, MAX_LENGTH_NAME
+from django.contrib.auth import get_user_model
+from connected.models import *
 
 class CategoryForm(forms.ModelForm):
     name = forms.CharField(max_length=MAX_LENGTH_NAME, help_text="Please enter the category name.")
@@ -43,9 +44,11 @@ class UserProfileForm(forms.ModelForm):
     class Meta:
         model = UserProfile
         fields = ('website', 'picture', )
-        
-from django import forms
-from django.contrib.auth import get_user_model
+
+class MessageForm(forms.ModelForm):
+      class Meta:
+          model = Message
+          fields = ('sender', 'receiver', 'message', 'created')  
 
 User = get_user_model()
 

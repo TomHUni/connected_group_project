@@ -29,6 +29,7 @@ urlpatterns = [
     path('send-message/<int:receiver_id>/', views.send_message, name='send_message'),
     path('friends/add/', views.add_friend, name='add_friend'),
     path('friends/handle_request/', views.handle_friend_request, name='handle_friend_request'),
-
+    path('send-message/', views.send_message, name='send_message'),
+    path('inbox/', views.inbox, name='inbox'),
 
 ]

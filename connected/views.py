@@ -1,13 +1,16 @@
-from django.shortcuts import render, redirect
-from django.urls import reverse
+from django import forms
+from django.shortcuts import render, redirect, get_object_or_404
+from django.urls import reverse, reverse_lazy
+from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
-from django.http import HttpResponse
+from django.contrib.auth.models import User
+from django.contrib.auth.views import LoginView
+from django.http import HttpResponse, HttpResponseRedirect
 from django.contrib.auth.forms import UserCreationForm
 from datetime import datetime
-from connected.models import Category, Event
-from connected.forms import CategoryForm, EventForm, UserForm, UserProfileForm
-from .models import Tab
+from connected.models import *
+from connected.forms import *
 
 def index(request):
     category_list = Category.objects.order_by('-likes')[:5]
@@ -41,7 +44,6 @@ def show_category(request, category_name_slug):
         context_dict['events'] = None
     return render(request, 'connected/category.html', context=context_dict)
 
-# views.py in your Django app
 
 def hub_view(request):
     if request.user.is_authenticated:
@@ -49,7 +51,6 @@ def hub_view(request):
         return render(request, 'connected/hub.html', {'tabs': tabs})
     else:
         return redirect('connected:login')  # Redirect to login page if not authenticated
-
 
 def add_tab(request):
     if request.method == 'POST' and request.user.is_authenticated:
@@ -116,7 +117,6 @@ def register(request):
         form = UserCreationForm()
     return render(request, 'connected/register.html', {'form': form})
 
-
 def user_login(request):
     if request.method == 'POST':
         username = request.POST.get('username')
@@ -139,6 +139,24 @@ def restricted(request):
     return render(request, 'connected/restricted.html')
 
 @login_required
+def send_message(request):
+    if request.method == 'POST':
+        form = MessageForm(request.POST)
+        if form.is_valid():
+            message = form.save(commit=False)
+            message.sender = request.user
+            message.save()
+            return redirect('inbox')  # Redirects to the inbox after sending message
+    else:
+        form = MessageForm()
+    return render(request, 'send_message.html', {'form': form})
+
+@login_required
+def inbox(request):
+    received_messages = Message.objects.filter(receiver=request.user)
+    return render(request, 'inbox.html', {'messages': received_messages})
+
+@login_required
 def user_logout(request):
     logout(request)
     return redirect(reverse('connected:home'))
@@ -159,10 +177,6 @@ def visitor_cookie_handler(request):
     else:
         request.session['last_visit'] = last_visit_cookie
     request.session['visits'] = visits
-    
-    # Import at the top
-from django.contrib.auth.views import LoginView
-from django.urls import reverse_lazy
 
 # Define your login view class
 class CustomLoginView(LoginView):
@@ -170,25 +184,13 @@ class CustomLoginView(LoginView):
     redirect_authenticated_user = True  # Redirect users who are already logged in
     next_page = reverse_lazy('connected:home')  # Redirect to home after login
 
-from django.contrib.auth.decorators import login_required
-from django.shortcuts import render
-
 @login_required
 def profile_view(request):
     return render(request, 'connected/profile.html', {'user': request.user})
 
-from django.shortcuts import get_object_or_404, render
-from .models import Tab
-
 def tab_detail_view(request, tab_id):
     tab = get_object_or_404(Tab, id=tab_id)
     return render(request, 'connected/tab_detail.html', {'tab': tab})
-
-from django.shortcuts import get_object_or_404, redirect, render
-from django.urls import reverse
-from .models import Tab
-from django.contrib.auth.decorators import login_required
-from django.http import HttpResponseRedirect
 
 @login_required
 def rename_tab(request, tab_id):
@@ -207,30 +209,9 @@ def delete_tab(request, tab_id):
         return HttpResponseRedirect(reverse('connected:hub'))
     return render(request, 'connected/delete_tab_confirmation.html', {'tab': tab})
 
-from django.shortcuts import render
-from .models import Friend, Message
-
-from django.shortcuts import render
-from .forms import AddFriendForm
-
-from django.shortcuts import render
-from .forms import AddFriendForm
-
 def friends_list(request):
-    # Assuming you're passing friend requests and the add friend form
     add_friend_form = AddFriendForm()
     return render(request, 'connected/friends_list.html', {'add_friend_form': add_friend_form})
-
-
-
-from django import forms
-from django.http import HttpResponseRedirect
-from django.urls import reverse
-
-class MessageForm(forms.ModelForm):
-    class Meta:
-        model = Message
-        fields = ['message']
 
 def send_message(request, receiver_id):
     if request.method == 'POST':
@@ -244,12 +225,6 @@ def send_message(request, receiver_id):
     else:
         form = MessageForm()
     return render(request, 'connected/send_message.html', {'form': form})
-
-from django.shortcuts import render, redirect, get_object_or_404
-from .models import FriendRequest
-from .forms import AddFriendForm, FriendRequestResponseForm
-from django.contrib.auth.models import User
-from django.contrib.auth.decorators import login_required
 
 @login_required
 def add_friend(request):
@@ -284,13 +259,6 @@ def handle_friend_request(request):
             
     return redirect('connected:friends_list')
 
-
-from django.shortcuts import redirect, get_object_or_404
-from django.contrib.auth.models import User
-from .models import FriendRequest
-from django.contrib.auth.decorators import login_required
-from django.contrib import messages
-
 @login_required
 def send_friend_request(request, user_id):
     to_user = get_object_or_404(User, id=user_id)
@@ -300,4 +268,3 @@ def send_friend_request(request, user_id):
     else:
         messages.error(request, "You can't send a friend request to yourself.")
     return redirect('wherever_you_want_to_redirect')
-
