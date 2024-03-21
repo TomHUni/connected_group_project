@@ -20,10 +20,11 @@ from django.conf import settings
 from django.conf.urls.static import static
 from connected import views
 from connected_group_project import settings
+from django.views.generic import RedirectView
 
 urlpatterns = [
-    path('', views.index, name='index'),
-    path('connected/', include('connected.urls')),
+    path('', RedirectView.as_view(url='/connected/')),  # Redirect root URL to /connected/
+    path('connected/', include('connected.urls')),  # Include the URLs from the connected app
     path('admin/', admin.site.urls),
 ]
 
