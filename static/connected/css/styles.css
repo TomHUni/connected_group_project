@@ -199,3 +199,29 @@ body { background-color: #f8f9fa; }
 .input-group input { border-right: 0; }
 .input-group .input-group-append { margin-left: -1px; }
 .input-group .input-group-append .btn { border-left: 0; }
+
+:root {
+    --background-light: #f8f9fa;
+    --background-dark: #343a40;
+    --text-light: #000;
+    --text-dark: #fff;
+}
+body.light-mode {
+    background-color: var(--background-light);
+    color: var(--text-light);
+}
+body.dark-mode {
+    background-color: var(--background-dark);
+    color: var(--text-dark);
+}
+/* Add other element styles for light and dark modes as needed */
+
+.dark-mode {
+    background-color: #343a40; /* Dark background */
+    color: #ffffff; /* Light text */
+}
+.light-mode {
+    background-color: #f8f9fa; /* Light background */
+    color: #343a40; /* Dark text */
+}
+/* Additional styling for specific elements as needed */
