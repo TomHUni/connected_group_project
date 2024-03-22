@@ -1,11 +1,32 @@
+<!-- tab_detail.html -->
 {% extends 'connected/base.html' %}
 
 {% block title %}{{ tab.name }}{% endblock %}
 
 {% block content %}
 <div class="container mt-4">
-    <h2>{{ tab.name }}</h2>
-    <p>Details and content for {{ tab.name }} can be added here.</p>
-    <!-- Add more content specific to the tab -->
+    <h2>{{ tab.name }}'s Weekly Schedule</h2>
+    <form method="post" action="{% url 'save_schedule' tab.id %}">
+      {% csrf_token %}
+      <table class="schedule-table">
+          <thead>
+            <tr>
+              {% for day in days_of_week %}
+                <th>{{ day }}</th>
+              {% endfor %}
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              {% for day in days_of_week %}
+                <td>
+                  <textarea name="{{ day|lower }}" rows="4" cols="20">{{ schedule.get(day)|default:"Add your text here" }}</textarea>
+                </td>
+              {% endfor %}
+            </tr>
+          </tbody>
+        </table>
+        <input type="submit" value="Save Schedule" />
+    </form>
 </div>
 {% endblock %}

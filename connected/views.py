@@ -11,6 +11,21 @@ from django.contrib.auth.forms import UserCreationForm
 from datetime import datetime
 from connected.models import *
 from connected.forms import *
+from .models import ScheduleEntry
+
+def add_event(request, tab_id):
+    if request.method == 'POST':
+        # Create a new ScheduleEntry from the form data
+        ScheduleEntry.objects.create(
+            user=request.user,
+            day=request.POST['day'],
+            start_time=request.POST['start_time'],
+            end_time=request.POST['end_time'],
+            title=request.POST['title'],
+            location=request.POST['location'],
+            tab_id=tab_id  # assuming the ScheduleEntry model has a 'tab' field
+        )
+        return redirect('tab_detail', tab_id=tab_id)
 
 def index(request):
     category_list = Category.objects.order_by('-likes')[:5]
@@ -248,22 +263,17 @@ def add_friend(request):
     return redirect('connected:friends_list')
 
 @login_required
-def handle_friend_request(request):
-    if request.method == 'POST':
-        action = request.POST.get('action', None)
-        request_id = request.POST.get('request_id', None)
-        friend_request = get_object_or_404(FriendRequest, id=request_id, to_user=request.user)
-        
-        if action == 'accept':
-            friend_request.from_user.friends.add(request.user)  # Assuming you have a many-to-many relationship set up
-            friend_request.to_user.friends.add(friend_request.from_user)
-            friend_request.delete()
-            messages.success(request, "Friend request accepted.")
-        elif action == 'decline':
-            friend_request.delete()
-            messages.info(request, "Friend request declined.")
-            
-    return redirect('connected:friends_list')
+def handle_friend_request(request, request_id):
+    friend_request = get_object_or_404(FriendRequest, id=request_id)
+    from_user_profile = friend_request.from_user.profile
+    to_user_profile = friend_request.to_user.profile
+
+    from_user_profile.friends.add(to_user_profile)
+    to_user_profile.friends.add(from_user_profile)
+
+    friend_request.delete()
+    return redirect('some_redirect_target')
+
 
 @login_required
 def send_friend_request(request, user_id):
@@ -287,3 +297,70 @@ def accept_friend_request(request, request_id):
     friend_request.to_user.userprofile.friends.add(friend_request.from_user.userprofile)
     friend_request.delete()
     return redirect('your_redirect_url')
+
+def tab_detail(request, tab_id):
+    # Your existing code to get the tab object
+    # ...
+
+    # Prepare your schedule dictionary
+    schedule = {
+        'monday': 'Your content for Monday',
+        'tuesday': 'Your content for Tuesday',
+        'wednesday': 'Your content for wednesday',
+        'thursday': 'Your content for Thursday',
+        'monday': 'Your content for Monday',
+        'tuesday': 'Your content for Tuesday',
+        'tuesday': 'Your content for Tuesday',
+        # ... and so on for each day
+    }
+    
+    days_of_week = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
+    context = {
+        'tab': tab,  # Your tab object
+        'days_of_week': days_of_week,
+        'schedule': schedule,  # Add this line
+        # Add any other context variables you need
+    }
+    return render(request, 'tab_detail.html', context)
+
+
+def weekly_schedule(request):
+    if request.method == 'POST':
+        form = ScheduleEntryForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('weekly_schedule')
+    else:
+        form = ScheduleEntryForm()
+    
+    schedule_entries = ScheduleEntry.objects.filter(user=request.user)
+    return render(request, 'weekly_schedule.html', {
+        'form': form,
+        'schedule_entries': schedule_entries,
+    })
+    
+@login_required
+def add_event(request, tab_id):
+    if request.method == 'POST':
+        # Assume you have a form class 'EventForm' to validate input data
+        form = EventForm(request.POST)
+        if form.is_valid():
+            event = form.save(commit=False)
+            event.tab = Tab.objects.get(pk=tab_id)
+            event.save()
+            # Redirect to the tab detail page or wherever appropriate
+            return redirect('tab_detail', tab_id=tab_id)
+    else:
+        form = EventForm()
+    return render(request, 'tab_detail.html', {'form': form})
+
+@login_required
+def save_schedule(request, tab_id):
+    tab = get_object_or_404(Tab, pk=tab_id, user=request.user)
+    if request.method == 'POST':
+        for day in ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]:
+            day_text = request.POST.get(day.lower())
+            # Save day_text in the database. You need a model or a way to store this information.
+            # ...
+        # Redirect back to the tab detail page or show a success message
+    return redirect('tab_detail', tab_id=tab.id)

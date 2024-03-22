@@ -35,10 +35,10 @@ class Event(models.Model):
     
 
 class UserProfile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="profile")
+    friends = models.ManyToManyField('self', symmetrical=True, related_name='friends_plus', blank=True)
     website = models.URLField(blank=True)
     picture = models.ImageField(upload_to='profile_images', blank=True)
-    friends = models.ManyToManyField('self', symmetrical=False, related_name='friends_plus', blank=True)
 
     def __str__(self):
         return self.user.username
@@ -46,6 +46,13 @@ class UserProfile(models.Model):
 class Tab(models.Model):
     name = models.CharField(max_length=100)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
+    monday_schedule = models.TextField(blank=True, null=True)
+    tuesday_schedule = models.TextField(blank=True, null=True)
+    wednesday_schedule = models.TextField(blank=True, null=True)
+    thursday_schedule = models.TextField(blank=True, null=True)
+    friday_schedule = models.TextField(blank=True, null=True)
+    saturday_schedule = models.TextField(blank=True, null=True)
+    sunday_schedule = models.TextField(blank=True, null=True)
 
     def __str__(self):
         return self.name
@@ -76,4 +83,11 @@ class Friendship(models.Model):
     class Meta:
         unique_together = ('from_user', 'to_user')
 
-
+class ScheduleEntry(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    day = models.CharField(max_length=9)  # E.g., "Monday"
+    start_time = models.TimeField()
+    end_time = models.TimeField()
+    title = models.CharField(max_length=255)
+    location = models.CharField(max_length=255, blank=True, null=True)
+    # Additional fields as necessary...

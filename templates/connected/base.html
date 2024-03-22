@@ -34,7 +34,6 @@
             {% endif %}
         </div>
     </div>
-    <button class="btn btn-secondary" id="modeToggle">Dark Mode</button>
 </nav>
 
 {% block content %}{% endblock %}
@@ -49,28 +48,5 @@
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
-<script>
-    document.addEventListener('DOMContentLoaded', () => {
-        const modeToggle = document.getElementById('modeToggle');
-        const body = document.body;
-        const currentMode = localStorage.getItem('preferredMode') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark-mode' : 'light-mode');
-
-        const applyMode = (mode) => {
-            const isDarkMode = mode === 'dark-mode';
-            body.className = mode; // Clears other classes and applies the chosen mode
-            modeToggle.textContent = isDarkMode ? 'Light Mode' : 'Dark Mode';
-            localStorage.setItem('preferredMode', mode);
-        };
-
-        modeToggle.addEventListener('click', () => {
-            const newMode = body.classList.contains('dark-mode') ? 'light-mode' : 'dark-mode';
-            applyMode(newMode);
-        });
-
-        applyMode(currentMode); // Apply the saved or preferred mode on load
-    });
-</script>
-
-
 </body>
 </html>

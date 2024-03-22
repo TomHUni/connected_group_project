@@ -31,6 +31,7 @@ urlpatterns = [
     path('friends/handle_request/', views.handle_friend_request, name='handle_friend_request'),
     path('send-message/', views.send_message, name='send_message'),
     path('inbox/', views.inbox, name='inbox'),
-    path('friends/handle_request/<int:request_id>/', views.accept_friend_request, name='accept_friend_request'),
-
+    path('friends/handle_request/<int:request_id>/', views.handle_friend_request, name='handle_friend_request'),
+    path('tabs/<int:tab_id>/add_event/', views.add_event, name='add_event'),
+     path('tabs/<int:tab_id>/save_schedule/', views.save_schedule, name='save_schedule'),
 ]
