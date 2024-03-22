@@ -15,7 +15,6 @@ from .models import ScheduleEntry
 
 def add_event(request, tab_id):
     if request.method == 'POST':
-        # Create a new ScheduleEntry from the form data
         ScheduleEntry.objects.create(
             user=request.user,
             day=request.POST['day'],
@@ -23,7 +22,7 @@ def add_event(request, tab_id):
             end_time=request.POST['end_time'],
             title=request.POST['title'],
             location=request.POST['location'],
-            tab_id=tab_id  # assuming the ScheduleEntry model has a 'tab' field
+            tab_id=tab_id
         )
         return redirect('tab_detail', tab_id=tab_id)
 
