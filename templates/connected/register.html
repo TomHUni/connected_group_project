@@ -1,6 +1,6 @@
 {% extends 'connected/base.html' %}
 
-{% load widget_tweaks %}  <!-- Ensure you have django-widget-tweaks installed -->
+{% load widget_tweaks %}
 
 {% block title %}Register{% endblock %}
 
@@ -18,7 +18,7 @@
                         {% for field in form %}
                             <div class="form-group">
                                 <label for="{{ field.id_for_label }}">{{ field.label }}</label>
-                                {{ field|add_class:"form-control" }}  <!-- Adds Bootstrap form-control class -->
+                                {{ field|add_class:"form-control" }}
                                 {% if field.help_text %}
                                     <small class="form-text text-muted">{{ field.help_text }}</small>
                                 {% endif %}
@@ -59,9 +59,8 @@
     }
     .invalid-feedback {
         font-size: 0.875em;
-        display: block; /* Make sure this is always visible when there are errors */
+        display: block;
     }
-    /* Custom focus styles for form inputs */
     .form-control:focus {
         border-color: #80bdff;
         box-shadow: 0 0 0 0.2rem rgba(0,123,255,.25);

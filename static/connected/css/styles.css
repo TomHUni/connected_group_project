@@ -1,12 +1,8 @@
-/* styles.css */
-
-/* Center the form */
 #user_form {
     margin: 0 auto;
     width: 50%;
 }
 
-/* Style form inputs and labels */
 #user_form input[type="text"],
 #user_form input[type="password"],
 #user_form input[type="email"],
@@ -23,7 +19,6 @@
     margin-bottom: 5px;
 }
 
-/* Style submit button */
 #user_form input[type="submit"] {
     background-color: #4CAF50;
     color: white;
@@ -33,7 +28,6 @@
     cursor: pointer;
 }
 
-/* Style messages */
 #messages {
     margin-top: 20px;
     padding: 10px;
@@ -52,7 +46,6 @@
     color: #721c24;
 }
 
-/* Style website input */
 #user_form input[type="url"] {
     width: 100%;
     padding: 10px;
@@ -61,12 +54,10 @@
     border-radius: 4px;
 }
 
-/* Style file input */
 #user_form input[type="file"] {
     margin-bottom: 10px;
 }
 
-/* Style password input */
 #user_form input[type="password"] {
     width: 100%;
     padding: 10px;
@@ -75,25 +66,22 @@
     border-radius: 4px;
 }
 
-/* Hide the bullet points for password input */
 #user_form input[type="password"]::-webkit-credentials-auto-fill-button,
 #user_form input[type="password"]::-webkit-credentials-auto-fill-button:focus {
     display: none;
 }
 
-/* Center and resize logo */
 .logo-container {
     text-align: right;
 }
 
 .logo-container img {
-    max-width: 100px; /* Adjust width as needed */
-    height: auto; /* Maintain aspect ratio */
-    margin-top: -50px; /* Adjust as needed to position the logo */
-    margin-right: 20px; /* Adjust as needed for spacing */
+    max-width: 100px;
+    height: auto;
+    margin-top: -50px;
+    margin-right: 20px;
 }
 
-/* Style navigation links */
 ul {
     list-style-type: none;
     margin: 0;
@@ -108,21 +96,19 @@ li {
 a {
     color: #333;
     text-decoration: none;
-    font-weight: bold; /* Make the navigation links bold */
-    font-size: 16px; /* Adjust font size as needed */
+    font-weight: bold;
+    font-size: 16px;
 }
 
 a:hover {
-    color: #4CAF50; /* Change color on hover */
+    color: #4CAF50;
 }
 
-/* Center the form */
 .form-container {
     margin: 0 auto;
     width: 50%;
 }
 
-/* Style form inputs and labels */
 .form-container input[type="text"],
 .form-container input[type="password"] {
     width: 100%;
@@ -137,7 +123,6 @@ a:hover {
     display: block;
 }
 
-/* Style submit button */
 .form-container input[type="submit"] {
     background-color: #4CAF50;
     color: white;
@@ -147,7 +132,6 @@ a:hover {
     cursor: pointer;
 }
 
-/* Style messages */
 #messages {
     margin-top: 20px;
     padding: 10px;
@@ -169,28 +153,28 @@ a:hover {
 .bubble-tab {
     display: inline-block;
     padding: 10px 15px;
-    background-color: #f0f0f0; /* Light grey background */
-    border-radius: 20px; /* Rounded corners for the bubble effect */
+    background-color: #f0f0f0;
+    border-radius: 20px;
     margin: 5px;
-    border: 1px solid #d0d0d0; /* Slight border for definition */
-    font-weight: bold; /* Optional: makes the text bold */
+    border: 1px solid #d0d0d0;
+    font-weight: bold;
 }
 
 .bubble-tab a {
-    color: #333; /* Dark grey text for contrast */
-    text-decoration: none; /* Removes underline from links */
+    color: #333;
+    text-decoration: none;
 }
 
 .bubble-tab a:hover {
-    color: #0056b3; /* Change color on hover for visual feedback */
+    color: #0056b3;
 }
 
 .jumbotron {
-    background-color: #f8f9fa; /* Light background color */
+    background-color: #f8f9fa;
     border-radius: 0.5rem;
 }
 .card-deck .card {
-    flex-grow: 1; /* Ensure cards have equal width and height */
+    flex-grow: 1;
 }
 
 body {
@@ -209,13 +193,13 @@ body {
 
 .calendar-grid {
     display: grid;
-    grid-template-columns: repeat(7, 1fr); /* 7 days a week */
+    grid-template-columns: repeat(7, 1fr);
     grid-gap: 10px;
 }
 
 .calendar-day-header {
-    background-color: #f8f9fa; /* Light gray background */
-    border: 1px solid #dee2e6; /* Slight border */
+    background-color: #f8f9fa; 
+    border: 1px solid #dee2e6; 
     padding: 8px;
     text-align: center;
     font-weight: bold;
@@ -223,19 +207,14 @@ body {
 
 .calendar-day-content {
     border: 1px solid #dee2e6;
-    min-height: 100px; /* Adjust based on your content */
-    /* Add additional styling as needed */
+    min-height: 100px; 
+   
 }
 
-/* Example media query for responsiveness */
 @media (max-width: 768px) {
     .calendar-grid {
-        grid-template-columns: repeat(1, 1fr); /* Stack on smaller screens */
+        grid-template-columns: repeat(1, 1fr); 
     }
-}
-
-.schedule-container {
-    /* Styles for the schedule container */
 }
 
 .schedule-container {
@@ -244,7 +223,6 @@ body {
     overflow-x: auto;
 }
 
-/* Schedule Table */
 .schedule-table {
     width: 100%;
     border-collapse: collapse;
@@ -252,7 +230,6 @@ body {
     min-width: 600px;
 }
 
-/* Schedule Headers */
 .schedule-table th {
     background-color: #f3f3f3;
     color: #333;
@@ -261,7 +238,6 @@ body {
     border: 1px solid #ddd;
 }
 
-/* Schedule Cells */
 .schedule-table td {
     border: 1px solid #ddd;
     padding: 8px;
@@ -270,7 +246,6 @@ body {
     height: 50px;
 }
 
-/* Entry Blocks */
 .entry-block {
     background-color: #dff0d8;
     border-left: 5px solid #4cae4c;
@@ -279,30 +254,25 @@ body {
     word-wrap: break-word;
 }
 
-/* Entry Time */
 .entry-time {
     font-weight: bold;
 }
 
-/* Entry Title */
 .entry-title {
     margin-top: 2px;
     font-size: 0.9em;
 }
 
-/* Entry Location */
 .entry-location {
     margin-top: 2px;
     font-size: 0.8em;
     color: #555;
 }
 
-/* Empty Cells */
 .empty-slot {
     background-color: #fafafa;
 }
 
-/* Responsive */
 @media (max-width: 768px) {
     .schedule-table {
         border: 0;

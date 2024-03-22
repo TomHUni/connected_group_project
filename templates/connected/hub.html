@@ -5,12 +5,10 @@
 {% block content %}
 <div class="container mt-4">
     <h2>Welcome to Your Hub</h2>
-    <!-- Button trigger modal -->
     <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addTabModal">
         + Add New Tab
     </button>
 
-    <!-- Modal -->
     <div class="modal fade" id="addTabModal" tabindex="-1" aria-labelledby="addTabModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -45,7 +43,6 @@
         <div class="card">
             <div class="card-body">
                 <h5 class="card-title">{{ tab.name }}</h5>
-                <!-- Optional: Add more tab details here -->
                 <a href="{% url 'connected:tab_detail' tab.id %}" class="btn btn-primary">View Tab</a>
                 <a href="{% url 'connected:rename_tab' tab.id %}" class="btn btn-sm btn-primary">Rename</a>
                 <a href="{% url 'connected:delete_tab' tab.id %}" class="btn btn-sm btn-danger">Delete</a>

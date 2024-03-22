@@ -61,18 +61,18 @@ def show_category(request, category_name_slug):
 
 def hub_view(request):
     if request.user.is_authenticated:
-        tabs = Tab.objects.filter(user=request.user)  # Fetch tabs associated with the user
+        tabs = Tab.objects.filter(user=request.user)
         return render(request, 'connected/hub.html', {'tabs': tabs})
     else:
-        return redirect('connected:login')  # Redirect to login page if not authenticated
+        return redirect('connected:login')
 
 def add_tab(request):
     if request.method == 'POST' and request.user.is_authenticated:
         tab_name = request.POST.get('tab_name')
-        Tab.objects.create(name=tab_name, user=request.user)  # Create a new tab for the user
-        return redirect('connected:hub')  # Redirect back to the hub
+        Tab.objects.create(name=tab_name, user=request.user) 
+        return redirect('connected:hub')
     else:
-        return redirect('connected:login')  # Redirect to login page if not authenticated or not POST request
+        return redirect('connected:login')
 
 @login_required
 def add_category(request):
@@ -124,9 +124,8 @@ def register(request):
         form = UserCreationForm(request.POST)
         if form.is_valid():
             user = form.save()
-            # Log the user in after registering
             login(request, user)
-            return redirect('connected:hub')  # Redirect to the hub or another appropriate page
+            return redirect('connected:hub')
     else:
         form = UserCreationForm()
     return render(request, 'connected/register.html', {'form': form})
@@ -160,7 +159,7 @@ def send_message(request):
             message = form.save(commit=False)
             message.sender = request.user
             message.save()
-            return redirect('inbox')  # Redirects to the inbox after sending message
+            return redirect('inbox')
     else:
         form = MessageForm()
     return render(request, 'send_message.html', {'form': form})
@@ -192,11 +191,10 @@ def visitor_cookie_handler(request):
         request.session['last_visit'] = last_visit_cookie
     request.session['visits'] = visits
 
-# Define your login view class
 class CustomLoginView(LoginView):
     template_name = 'connected/login.html'
-    redirect_authenticated_user = True  # Redirect users who are already logged in
-    next_page = reverse_lazy('connected:home')  # Redirect to home after login
+    redirect_authenticated_user = True
+    next_page = reverse_lazy('connected:home')
 
 @login_required
 def profile_view(request):
@@ -208,7 +206,7 @@ def tab_detail_view(request, tab_id):
 
 @login_required
 def rename_tab(request, tab_id):
-    tab = get_object_or_404(Tab, id=tab_id, user=request.user)  # Assuming there's a user field
+    tab = get_object_or_404(Tab, id=tab_id, user=request.user)
     if request.method == 'POST':
         tab.name = request.POST.get('new_name')
         tab.save()
@@ -254,11 +252,10 @@ def add_friend(request):
             username = form.cleaned_data['username']
             try:
                 user_to_add = User.objects.get(username=username)
-                # Prevent sending a request to oneself and duplicate requests
                 if user_to_add != request.user and not FriendRequest.objects.filter(from_user=request.user, to_user=user_to_add).exists():
                     FriendRequest.objects.create(from_user=request.user, to_user=user_to_add)
             except User.DoesNotExist:
-                pass  # Handle error or add a message indicating the user doesn't exist
+                pass 
     return redirect('connected:friends_list')
 
 @login_required
@@ -285,23 +282,18 @@ def send_friend_request(request, user_id):
     return redirect('wherever_you_want_to_redirect')
 
 from django.shortcuts import get_object_or_404, redirect
-from .models import FriendRequest, User  # Assuming User is Django's default User model
+from .models import FriendRequest, User
 from django.contrib.auth.decorators import login_required
 
 @login_required
 def accept_friend_request(request, request_id):
     friend_request = get_object_or_404(FriendRequest, id=request_id, to_user=request.user)
-    # Add each user to the other's list of friends
     friend_request.from_user.userprofile.friends.add(friend_request.to_user.userprofile)
     friend_request.to_user.userprofile.friends.add(friend_request.from_user.userprofile)
     friend_request.delete()
     return redirect('your_redirect_url')
 
 def tab_detail(request, tab_id):
-    # Your existing code to get the tab object
-    # ...
-
-    # Prepare your schedule dictionary
     schedule = {
         'monday': 'Your content for Monday',
         'tuesday': 'Your content for Tuesday',
@@ -310,15 +302,13 @@ def tab_detail(request, tab_id):
         'monday': 'Your content for Monday',
         'tuesday': 'Your content for Tuesday',
         'tuesday': 'Your content for Tuesday',
-        # ... and so on for each day
     }
     
     days_of_week = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
     context = {
-        'tab': tab,  # Your tab object
+        'tab': tab,
         'days_of_week': days_of_week,
-        'schedule': schedule,  # Add this line
-        # Add any other context variables you need
+        'schedule': schedule,
     }
     return render(request, 'tab_detail.html', context)
 
@@ -341,13 +331,11 @@ def weekly_schedule(request):
 @login_required
 def add_event(request, tab_id):
     if request.method == 'POST':
-        # Assume you have a form class 'EventForm' to validate input data
         form = EventForm(request.POST)
         if form.is_valid():
             event = form.save(commit=False)
             event.tab = Tab.objects.get(pk=tab_id)
             event.save()
-            # Redirect to the tab detail page or wherever appropriate
             return redirect('tab_detail', tab_id=tab_id)
     else:
         form = EventForm()
@@ -359,7 +347,4 @@ def save_schedule(request, tab_id):
     if request.method == 'POST':
         for day in ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]:
             day_text = request.POST.get(day.lower())
-            # Save day_text in the database. You need a model or a way to store this information.
-            # ...
-        # Redirect back to the tab detail page or show a success message
     return redirect('tab_detail', tab_id=tab.id)

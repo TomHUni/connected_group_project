@@ -23,8 +23,8 @@ from connected_group_project import settings
 from django.views.generic import RedirectView
 
 urlpatterns = [
-    path('', RedirectView.as_view(url='/connected/')),  # Redirect root URL to /connected/
-    path('connected/', include('connected.urls')),  # Include the URLs from the connected app
+    path('', RedirectView.as_view(url='/connected/')),
+    path('connected/', include('connected.urls')),
     path('admin/', admin.site.urls),
 ]
 
