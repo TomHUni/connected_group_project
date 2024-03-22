@@ -58,3 +58,13 @@ class AddFriendForm(forms.Form):
 class FriendRequestResponseForm(forms.Form):
     request_id = forms.IntegerField(widget=forms.HiddenInput())
     action = forms.CharField(widget=forms.HiddenInput())
+
+class TabScheduleForm(forms.ModelForm):
+    class Meta:
+        model = Tab
+        fields = ['monday_schedule', 'tuesday_schedule', 'wednesday_schedule', 'thursday_schedule', 'friday_schedule', 'saturday_schedule', 'sunday_schedule']
+        
+class ScheduleEntryForm(forms.ModelForm):
+    class Meta:
+        model = ScheduleEntry
+        fields = ['day', 'start_time', 'end_time', 'title', 'location']

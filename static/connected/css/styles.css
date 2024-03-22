@@ -225,3 +225,141 @@ body.dark-mode {
     color: #343a40; /* Dark text */
 }
 /* Additional styling for specific elements as needed */
+
+/* Inside your static/css/styles.css file */
+
+.calendar-container {
+    margin-top: 20px;
+}
+
+.calendar-grid {
+    display: grid;
+    grid-template-columns: repeat(7, 1fr); /* 7 days a week */
+    grid-gap: 10px;
+}
+
+.calendar-day-header {
+    background-color: #f8f9fa; /* Light gray background */
+    border: 1px solid #dee2e6; /* Slight border */
+    padding: 8px;
+    text-align: center;
+    font-weight: bold;
+}
+
+.calendar-day-content {
+    border: 1px solid #dee2e6;
+    min-height: 100px; /* Adjust based on your content */
+    /* Add additional styling as needed */
+}
+
+/* Example media query for responsiveness */
+@media (max-width: 768px) {
+    .calendar-grid {
+        grid-template-columns: repeat(1, 1fr); /* Stack on smaller screens */
+    }
+}
+
+.schedule-container {
+    /* Styles for the schedule container */
+}
+
+.schedule-container {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+    overflow-x: auto;
+}
+
+/* Schedule Table */
+.schedule-table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+    min-width: 600px;
+}
+
+/* Schedule Headers */
+.schedule-table th {
+    background-color: #f3f3f3;
+    color: #333;
+    text-align: center;
+    padding: 8px;
+    border: 1px solid #ddd;
+}
+
+/* Schedule Cells */
+.schedule-table td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: center;
+    vertical-align: top;
+    height: 50px;
+}
+
+/* Entry Blocks */
+.entry-block {
+    background-color: #dff0d8;
+    border-left: 5px solid #4cae4c;
+    padding: 4px;
+    margin-bottom: 4px;
+    word-wrap: break-word;
+}
+
+/* Entry Time */
+.entry-time {
+    font-weight: bold;
+}
+
+/* Entry Title */
+.entry-title {
+    margin-top: 2px;
+    font-size: 0.9em;
+}
+
+/* Entry Location */
+.entry-location {
+    margin-top: 2px;
+    font-size: 0.8em;
+    color: #555;
+}
+
+/* Empty Cells */
+.empty-slot {
+    background-color: #fafafa;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .schedule-table {
+        border: 0;
+    }
+
+    .schedule-table thead {
+        display: none;
+    }
+
+    .schedule-table tr {
+        margin-bottom: 10px;
+        display: block;
+        border-bottom: 2px solid #ddd;
+    }
+
+    .schedule-table td {
+        display: block;
+        text-align: right;
+    }
+
+    .schedule-table td:last-child {
+        border-bottom: 0;
+    }
+
+    .schedule-table td:before {
+        content: attr(data-label);
+        float: left;
+        font-weight: bold;
+        text-transform: uppercase;
+    }
+
+    .entry-block {
+        text-align: left;
+    }
+}

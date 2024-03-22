@@ -30,7 +30,11 @@ SECRET_KEY = 'hvjn-6l$=%kq()4ecjd36p5by^g57*cw6k082ot7v76&ax*p2o'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
+<<<<<<< HEAD
 ALLOWED_HOSTS = ['mahid8011.pythonanywhere.com']
+=======
+ALLOWED_HOSTS = ['mahid8011.pythonanywhere.com', '127.0.0.1', 'localhost']
+>>>>>>> c2e12801a6cc0ceb10ae3716012cd251988e2b9b
 
 
 # Application definition

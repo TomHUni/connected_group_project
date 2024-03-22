@@ -1,0 +1,17 @@
+<!-- weekly_schedule.html -->
+
+{% extends 'base.html' %}
+
+{% block content %}
+  <div class="schedule-container">
+    <!-- A table or grid layout for displaying the schedule -->
+    <div>Your schedule grid here...</div>
+    
+    <!-- The form for adding new schedule entries -->
+    <form method="post">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <input type="submit" value="Add Schedule Entry">
+    </form>
+  </div>
+{% endblock %}
